@@ -1,0 +1,10 @@
+Django==4.0.1
+djangorestframework==3.13.1
+PyJWT==2.3.0
+django-cors-headers==3.11.0
+## psycopg es VS - binary es una alternativa
+psycopg2-binary
+tzdata==2022.1
+pytest-django==4.5.2
+python-dotenv
+

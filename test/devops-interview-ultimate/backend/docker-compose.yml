@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: database
+    image: postgres:12.0-alpine
+    env_file: .env
+    environment:
+      LC_ALL: en_US.UTF-8
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: web_app
+    depends_on:
+      - db
+    env_file: .env
+    environment:
+      DJANGO_SETTINGS_MODULE: core.settings
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ../frontend  # Asumiendo que el build está dentro de frontend
+    container_name: frontend_app
+    depends_on:
+      - web
+    ports:
+      - "3000:3000"
+    command: npm run build   # Asegúrate de ejecutar npm run build
+
+  nginx:
+    build: ../nginx
+    container_name: nginx_proxy
+    depends_on:
+      - frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx/conf.d:/etc/nginx/conf.d
+      - ../frontend/build:/usr/share/nginx/html  # Volumen que comparte los archivos generados con nginx
+
+volumes:
+  postgres_data:
+  static:
+  media:
