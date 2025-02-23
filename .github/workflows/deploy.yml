@@ -1,0 +1,45 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar agente SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+
+      - name: Construir Frontend en EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST << 'EOF'
+            # Navegar a la carpeta del frontend
+            cd test/devops-interview-ultimate/frontend
+            # Instalar dependencias
+            npm install
+            # Ejecutar el build de React
+            npm run build
+          EOF
+
+      - name: Desplegar vía Docker Compose en EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST << 'EOF'
+            # Navegar al directorio de docker-compose
+            cd test/devops-interview-ultimate/backend
+            # Detener contenedores existentes
+            docker-compose down
+            # Levantar contenedores con la nueva imagen y contenido
+            docker-compose up --build -d
+          EOF
