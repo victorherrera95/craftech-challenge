@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(" ")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "18.191.95.73", "*").split(" ")
 
 # Application definition
 
@@ -151,7 +151,7 @@ REST_FRAMEWORK = {
 # ################### CORS              ############################### #
 # ##################################################################### #
 
-CORS_ALLOWED_ORIGINS = ["http://localhost", "http://127.0.0.1"]
+CORS_ALLOWED_ORIGINS = ["http://localhost", "http://127.0.0.1", "http://18.191.95.73"]
 
 # ##################################################################### #
 # ################### TESTING           ############################### #
