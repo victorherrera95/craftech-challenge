@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'frontend/**'  
+      - 'frontend/**'
   workflow_dispatch:  # Permite ejecución manual desde GitHub Actions
 
 jobs:
@@ -21,12 +21,15 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
+      - name: Debug EC2_HOST value
+        run: echo "EC2_HOST is ${{ secrets.EC2_HOST }}"
+
       - name: Deploy Backend via Docker Compose on EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST << 'EOF'
-            cd test/devops-interview-ultimate/backend 
+            cd test/devops-interview-ultimate/backend
             docker-compose down
             docker-compose up --build -d
           EOF
