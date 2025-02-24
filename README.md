@@ -59,7 +59,7 @@ El diagrama de red refleja la arquitectura de la aplicación diseñada para alta
 
 ## Flujo de Solicitudes:
 
-1. **Cliente** accede a la aplicación web a través de CloudFront (CDN) para obtener los archivos estáticos, como el frontend en React o Angular. 
+1. **Cliente** accede a la aplicación web a través de CloudFront (CDN) para obtener los archivos estáticos, como el frontend. 
    - CloudFront entrega los archivos de S3 con baja latencia.
    
 2. Cuando el cliente necesita interactuar con el backend (por ejemplo, realizar una autenticación o consultar datos), envía una solicitud al **API Gateway**.
@@ -80,6 +80,13 @@ Puedes consultar el diagrama de red en el archivo [Diagrama de red craft challen
 ---
 
 ## 2. Despliegue Dockerizado 🐳
+
+ ## Estructura del proyecto
+El proyecto está organizado de la siguiente manera:
+- `/backend`: Contiene el código del backend en Django, el Dockerfile y los scripts relacionados.
+- `/frontend`: Contiene el código de React.js, el Dockerfile y los scripts necesarios para la construcción del frontend.
+- `/nginx`: Contiene la configuración de Nginx para servir el frontend y hacer proxy inverso al backend.
+- `docker-compose.yml`: Archivo para orquestar los contenedores de la aplicación.
 
 El despliegue de la aplicación se realiza utilizando **Docker** para garantizar portabilidad, escalabilidad y facilidad de gestión. Se usan tres contenedores separados para el frontend, backend y Nginx. Cada componente se ejecuta de forma independiente utilizando Docker Compose.
 
@@ -137,23 +144,23 @@ Para ejecutar la aplicación localmente en tu máquina, sigue estos pasos:
 - **Grupos de seguridad**: Para gestionar el acceso a las instancias EC2.
 - **AWS EC2**: Instancia con Ubuntu que aloja la aplicación Dockerizada.
 - **EBS**: Se utiliza para ampliar el volumen de la instancia EC2 y asegurar que el despliegue sea exitoso.
-- **Docker**: Utilizado para contenerizar el frontend, el backend y Nginx, cada uno en contenedores orquestados.
+- **Docker**: Utilizado para contenerizar el frontend, el backend y Nginx, cada uno en contenedores orquestados con sus respectivos Dockerfiles.
 - **Nginx**: Configurado como proxy inverso entre el frontend y el backend, sirviendo también el archivo `index.html`.
 - **VPC**: Configuración de la red para asegurar la seguridad y disponibilidad.
 
   ## Pasos para el Despliegue en AWS:
 
   ### 1. **Configurar la VPC**:
-   - Crear una VPC con subredes públicas y privadas.
+   - Creacion de una VPC con subredes públicas y privadas.
 
   ### 2. **Configurar la Instancia EC2**:
-   - Lanza una instancia EC2 con Ubuntu.
-   - Configura el grupo de seguridad para permitir acceso SSH y tráfico en los puertos 80 (frontend) y 8000 (backend).
-   - Amplía el volumen de la instancia EC2 utilizando EBS para disponer del espacio necesario para instalaciones y disponibilidad.
+   - Lanzamiento de una instancia EC2 t3.medium con Ubuntu.
+   - Configuracion de el grupo de seguridad para permitir acceso SSH y tráfico en los puertos 80 (frontend) y 8000 (backend).
+   - Ampliacion el volumen de la instancia EC2 utilizando EBS para disponer del espacio necesario para instalaciones y disponibilidad.
 
   ### 3. **Instalar Docker y Docker Compose**:
 
-    En la instancia EC2, instala Docker y Docker Compose:
+    En la instancia EC2, instalacion de Docker y Docker Compose:
 
     ```bash
       sudo apt update
@@ -162,17 +169,17 @@ Para ejecutar la aplicación localmente en tu máquina, sigue estos pasos:
 
   ### 4. **Desplegar la aplicacion**:
 
-  ### Clona el repositorio en la instancia EC2:
+  ### Clonar el repositorio en la instancia EC2:
 
      ```bash
       git clone https://github.com/victorherrera95/craftech-challenge.git
      ```
-     2. **Navega al directorio backend:**
+     2. **Navegar al directorio backend:**
 
     ```bash
      cd craftech-challenge/test/test/devops-interview-ultimate/backend
     ```
-     3. **Ejecuta en el directorio backend:**
+     3. **Ejecutar en el directorio backend:**
    ```bash
      docker-compose up --build
     ```
@@ -180,7 +187,7 @@ Para ejecutar la aplicación localmente en tu máquina, sigue estos pasos:
         Al termnar de construirse las imagenes de database, web_app y nginx_proxy, en tu navegador podras acceder colocando http://18.191.95.73
 
 
- ## 4. **CI/CD** :hourglass_flowing_sand:
+ ## 3. **CI/CD** :hourglass_flowing_sand:
 
 Se configuró un pipeline en **GitHub Actions** para automatizar el proceso de construcción y despliegue. 🚀
 
@@ -189,7 +196,17 @@ Cada vez que hay un cambio en el archivo `index.html` de **Nginx**, o en algun c
 1. 🏗️ Reconstruye la imagen del contenedor.
 2. 🚢 Despliega los contenedores actualizados en la instancia **EC2**.
 
-Este flujo de trabajo asegura que la aplicación se mantenga siempre actualizada y lista para producción sin intervención manual (**se debe hacer push de los cambios a la rama main**). Si llegase a ocurrir algun error, el pipeline tambien tiene instrucciones para que se pueda ejecutar manualmente corriendo la instruccion "Run workflow" en la web de Github.  
+Este flujo de trabajo asegura que la aplicación se mantenga siempre actualizada y lista para producción sin intervención manual (**se debe hacer push de los cambios a la rama main**). Si llegase a ocurrir algun error, el pipeline tambien tiene instrucciones para que se pueda ejecutar manualmente corriendo la instruccion "Run workflow" en la web de Github. **El codigo del pipeline se encuentra en el directorio .github/workflows/main.yml**  
+
+## Mejoras aplicables para un futuro
+
+A pesar de que se seleccionaron pocos recursos en la nube debido al tamaño de la aplicación, se considera continuar trabajando en las siguientes mejoras:
+
+- 🚀 **Automatización del despliegue**: Implementar herramientas como **Terraform** para optimizar los procesos de infraestructura.
+- 📊 **Monitoreo y visualización**: Integrar herramientas de monitoreo como **Prometheus** y **Grafana** para obtener datos más detallados sobre el rendimiento de los procesos.
+- 🔒 **Seguridad**: Mejorar la seguridad asignando roles adecuados con **IAM** (Identity and Access Management) para gestionar el acceso a los recursos de manera más eficiente.
+- 📦 **Contenedores y Orquestación:** Utilizar Kubernetes para gestionar los contenedores de forma eficiente y permitir una escalabilidad aún mayor.
+
 
 
   
