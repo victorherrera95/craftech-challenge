@@ -25,11 +25,14 @@ jobs:
         run: echo "EC2_HOST is ${{ secrets.EC2_HOST }}"
 
       - name: Deploy Backend via Docker Compose on EC2
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST << 'EOF'
+          echo "EC2_HOST is ${{ secrets.EC2_HOST }}"
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
             cd test/devops-interview-ultimate/backend
+            docker-compose down
+            docker-compose up --build -d
+          EOF
+
             docker-compose down
             docker-compose up --build -d
           EOF
