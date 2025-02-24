@@ -4,6 +4,25 @@ Este repositorio contiene la solución completa para la prueba técnica que abar
 
 ---
 
+## Tabla de Contenidos
+
+1. [Diagrama de Red en AWS 🌐](#1-diagrama-de-red-en-aws-)
+   - [Componentes del Diagrama](#componentes-del-diagrama)
+   - [Flujo de Solicitudes](#flujo-de-solicitudes)
+
+2. [Despliegue Dockerizado 🐳](#2-despliegue-dockerizado-)
+   - [Estructura del Proyecto](#estructura-del-proyecto)
+   - [Componentes Dockerizados](#componentes-dockerizados)
+   - [Despliegue Local 💻](#despliegue-local-)
+   - [Despliegue en AWS ☁️](#despliegue-en-aws)
+
+3. [CI/CD ⌛](#3-cicd-)
+   - [Pipeline en GitHub Actions](#pipeline-en-github-actions)
+
+4. [Mejoras Futuras](#mejoras-aplicables-para-un-futuro)
+
+---
+
 ## 1. Diagrama de Red en AWS 🌐
 
 El diagrama de red refleja la arquitectura de la aplicación diseñada para alta disponibilidad en AWS. Esta solución incluye:
@@ -191,14 +210,30 @@ Para ejecutar la aplicación localmente en tu máquina, sigue estos pasos:
 
 Se configuró un pipeline en **GitHub Actions** para automatizar el proceso de construcción y despliegue. 🚀
 
-Cada vez que hay un cambio en el archivo `index.html` de **Nginx**, o en algun componente, el pipeline automáticamente:
-
 1. 🏗️ Reconstruye la imagen del contenedor.
 2. 🚢 Despliega los contenedores actualizados en la instancia **EC2**.
 
-Este flujo de trabajo asegura que la aplicación se mantenga siempre actualizada y lista para producción sin intervención manual (**se debe hacer push de los cambios a la rama main**). Si llegase a ocurrir algun error, el pipeline tambien tiene instrucciones para que se pueda ejecutar manualmente corriendo la instruccion "Run workflow" en la web de Github. **El codigo del pipeline se encuentra en el directorio .github/workflows/main.yml**  
+El pipeline realiza los siguientes pasos:
 
-## Mejoras aplicables para un futuro
+1. **Construcción de la imagen Docker**:
+   - Cada vez que se realiza un cambio en la rama `main` en el repositorio, GitHub Actions ejecuta un workflow que construye una nueva imagen Docker para el frontend, backend y Nginx. Esto asegura que siempre se esté trabajando con la versión más reciente del código.
+   
+2. **Despliegue en AWS**:
+   - Una vez que la imagen Docker se construye con éxito, el pipeline despliega automáticamente la nueva imagen en AWS. Los pasos del despliegue incluyen:
+     - **Conexión a la instancia EC2** mediante SSH.
+     - **Detención de contenedores antiguos** en EC2 con `docker-compose down`.
+     - **Construcción y ejecución de contenedores nuevos** en EC2 usando `docker-compose up --build -d`.
+     - Esto asegura que la última versión del código esté siempre desplegada en el entorno de producción.
+
+3. **Notificación de éxito o error**:
+   - Si el pipeline se ejecuta correctamente, GitHub Actions envía una confirmación de éxito indicando que el despliegue se completó correctamente. En caso de fallos, se notifica el error para facilitar la solución.
+   
+4. **Ejecución manual (workflow_dispatch)**:
+   - Además de las ejecuciones automáticas al hacer push en la rama `main`, el pipeline también permite su ejecución manual desde la interfaz de GitHub Actions. Esto es útil si se desea realizar un despliegue en cualquier momento sin necesidad de realizar un cambio en el código.
+
+**El codigo del pipeline se encuentra en el directorio .github/workflows/main.yml**  
+
+## 4. Mejoras aplicables para un futuro
 
 A pesar de que se seleccionaron pocos recursos en la nube debido al tamaño de la aplicación, se considera continuar trabajando en las siguientes mejoras:
 
