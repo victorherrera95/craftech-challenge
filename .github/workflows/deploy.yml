@@ -20,26 +20,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
-      - name: Build Frontend on EC2
+      - name: Deploy Backend via Docker Compose on EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST << 'EOF'
-            # Navegar a la carpeta del frontend
-            cd test/devops-interview-ultimate/frontend
-            # Ejecutar el build de React
-            npm install
-            npm run build
-          EOF
-
-      - name: Deploy via Docker Compose on EC2
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST << 'EOF'
-            # Navegar al directorio donde se encuentra el docker-compose
             cd test/devops-interview-ultimate/backend 
-            # Reiniciar los contenedores con la nueva imagen y contenido
             docker-compose down
             docker-compose up --build -d
           EOF
