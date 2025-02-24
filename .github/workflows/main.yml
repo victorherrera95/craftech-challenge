@@ -1,11 +1,12 @@
-name: Deploy Application 
+name: Deploy Application
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'frontend/**'   
+      - 'frontend/**'  
+  workflow_dispatch:  # Permite ejecución manual desde GitHub Actions
 
 jobs:
   deploy:
