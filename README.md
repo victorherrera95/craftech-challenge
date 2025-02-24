@@ -203,7 +203,7 @@ Para ejecutar la aplicación localmente en tu máquina, sigue estos pasos:
      docker-compose up --build
     ```
      4. **Acceder a la aplicacion:**
-        Al termnar de construirse las imagenes de database, web_app y nginx_proxy, en tu navegador podras acceder colocando http://18.191.95.73
+        La aplicacion actualmente ya esta desplegada y se puede probar en el navegador, podras acceder colocando http://18.191.95.73
 
 
  ## 3. **CI/CD** :hourglass_flowing_sand:
