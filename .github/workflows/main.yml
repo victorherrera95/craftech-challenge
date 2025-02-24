@@ -21,18 +21,16 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
+      - name: Set EC2_HOST as environment variable
+        run: echo "EC2_HOST=${{ secrets.EC2_HOST }}" >> $GITHUB_ENV
+
       - name: Debug EC2_HOST value
-        run: echo "EC2_HOST is ${{ secrets.EC2_HOST }}"
+        run: echo "EC2_HOST is $EC2_HOST"
 
       - name: Deploy Backend via Docker Compose on EC2
         run: |
-          echo "EC2_HOST is ${{ secrets.EC2_HOST }}"
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST << 'EOF'
             cd test/devops-interview-ultimate/backend
-            docker-compose down
-            docker-compose up --build -d
-          EOF
-
             docker-compose down
             docker-compose up --build -d
           EOF
