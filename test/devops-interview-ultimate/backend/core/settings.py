@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "18.191.95.73").split(" ")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "18.191.95.73 localhost 127.0.0.1").split(" ")
 
 # Application definition
 
