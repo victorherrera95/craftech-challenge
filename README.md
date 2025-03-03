@@ -143,6 +143,9 @@ Para ejecutar la aplicación localmente en tu máquina, sigue estos pasos:
 
     ```bash
      docker-compose up --build -d
+    ```
+
+    En tu navegador, podrás acceder a la aplicación colocando http://localhost:80 
 
   Esto construirá y ejecutará los contenedores en segundo plano. Para detenerlos:
 
@@ -151,8 +154,7 @@ Para ejecutar la aplicación localmente en tu máquina, sigue estos pasos:
 ```
 
 
-  En tu navegador, podrás acceder a la aplicación frontend en http://localhost:3000 y al backend en http://localhost:8000. 
-
+  
 
   ## 2.1 Despliegue en AWS ☁️
 
