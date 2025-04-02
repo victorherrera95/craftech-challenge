@@ -205,7 +205,7 @@ Para ejecutar la aplicación localmente en tu máquina, sigue estos pasos:
      docker-compose up --build
     ```
      4. **Acceder a la aplicacion:**  **(ACTUALMENTE NO DISPONIBLE)**
-        La aplicacion actualmente ya esta desplegada y se puede probar en el navegador, podras acceder colocando http://18.191.95.73
+        La aplicacion ya esta desplegada y se puede probar en el navegador, podras acceder colocando http://18.191.95.73
 
 
  ## 3. **CI/CD** :hourglass_flowing_sand:
