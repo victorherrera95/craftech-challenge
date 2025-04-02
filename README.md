@@ -204,7 +204,7 @@ Para ejecutar la aplicación localmente en tu máquina, sigue estos pasos:
    ```bash
      docker-compose up --build
     ```
-     4. **Acceder a la aplicacion:**
+     4. **Acceder a la aplicacion:**  **(ACTUALMENTE NO DISPONIBLE)**
         La aplicacion actualmente ya esta desplegada y se puede probar en el navegador, podras acceder colocando http://18.191.95.73
 
 
